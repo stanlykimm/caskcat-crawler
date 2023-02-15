@@ -11,6 +11,7 @@ class MongoDB:
         self.__product: Collection = self.__db.product
         self.__brand: Collection = self.__db.brand
         self.__dailyshot: Collection = self.__db.dailyshot
+        self.__dali: Collection = self.__db.dali
 
     @property
     def product(self) -> Collection:
@@ -23,6 +24,10 @@ class MongoDB:
     @property
     def dailyshot(self) -> Collection:
       return self.__dailyshot
+
+    @property
+    def dali(self) -> Collection:
+      return self.__dali
 
 class PyObjectId(ObjectId):
     @classmethod

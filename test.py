@@ -1,45 +1,60 @@
+import os
+import sys
+import boto3  # REQUIRED! - Details here: https://pypi.org/project/boto3/
+from botocore.exceptions import ClientError
+from botocore.config import Config
+from dotenv import load_dotenv  # Project Must install Python Package:  python-dotenv
 import requests
-cookies = {
-    'PHPSESSID': 'ikecd9ahrqbl9aa5tnjjmhk7u0',
-    'ForbizCsrfCookieName': '61320e4166692d18eb231100172c3282',
-    '_fbp': 'fb.2.1670211746657.1611192878',
-    'LAST_CON_TIME': '1670211746',
-    'RFID': '000005000000000',
-    'VISITORDATE': '20221205',
-    'PAGEID': '00000326',
-    'UVID': 'f62bca34bec914af25b2c75aec8b8fb1',
-    'VID': '5da50202de677ed0c90f884b486bcf18',
-    'ajs_anonymous_id': 'b6ad33fb-2f8e-49a3-916f-57922c0661e8',
-}
+import secrets
 
-headers = {
-    'Accept': '*/*',
-    'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
-    'Connection': 'keep-alive',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    # 'Cookie': 'PHPSESSID=ikecd9ahrqbl9aa5tnjjmhk7u0; ForbizCsrfCookieName=61320e4166692d18eb231100172c3282; _fbp=fb.2.1670211746657.1611192878; LAST_CON_TIME=1670211746; RFID=000005000000000; VISITORDATE=20221205; PAGEID=00000326; UVID=f62bca34bec914af25b2c75aec8b8fb1; VID=5da50202de677ed0c90f884b486bcf18; ajs_anonymous_id=b6ad33fb-2f8e-49a3-916f-57922c0661e8',
-    'Origin': 'https://www.daligo.co.kr',
-    'Referer': 'https://www.daligo.co.kr/shop/goodsList/002000000000000',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-    'X-Requested-With': 'XMLHttpRequest',
-    'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
-}
+keyId = '0040fdfeba09c8f0000000001'
+keyName = 'caskcatkey'
+appKey = 'K004Inl7rmWHRkUhLvx8OpUYzJRVftE'
+ENDPOINT = 'https://s3.us-west-004.backblazeb2.com'
 
-data = {
-    'page': '1',
-    'max': '1000',
-    'filterCid': '002000000000000',
-    'orderBy': 'orderCnt',
-    'ForbizCsrfTestName': '61320e4166692d18eb231100172c3282',
-}
+def get_b2_resource(endpoint, key_id, application_key):
+    b2 = boto3.resource(service_name='s3',
+                        endpoint_url=endpoint,                # Backblaze endpoint
+                        aws_access_key_id=keyId,              # Backblaze keyID
+                        aws_secret_access_key=appKey, # Backblaze applicationKey
+                        config = Config(
+                            signature_version='s3v4',
+                    ))
+    return b2
 
-response = requests.post('https://www.daligo.co.kr/controller/product/getGoodsList', cookies=cookies, headers=headers, data=data)
-print(response.text)
+def upload_file(bucket, directory, file, b2, b2path=None):
+    file_path = file
+    remote_path = b2path
+    if remote_path is None:
+        remote_path = file
+    try:
+        response = b2.Bucket(bucket).upload_file(file_path, remote_path)
+    except ClientError as ce:
+        print('error', ce)
+
+    return response
 
 
+def upload_file_ojb(bucket, directory, file, b2, b2path=None):
+    file_path = file
+    remote_path = b2path
+    if remote_path is None:
+        remote_path = file
+    try:
+        response = b2.Bucket(bucket).upload_file(file_path, remote_path)
+    except ClientError as ce:
+        print('error', ce)
 
+    return response
+
+b2 = get_b2_resource(ENDPOINT, keyId, appKey)
+
+name = str(secrets.token_hex(nbytes=32))
+url = "https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg"
+r = requests.get(url, stream=True)
+with open(name, 'wb') as f:
+    for chunk in r:
+        f.write(chunk)
+rtn = upload_file('caskcat', '', name,  b2, 'mom/2022/12/'+name)
+os.remove(name)
+print(rtn)

@@ -517,7 +517,7 @@ we_headers = {
     "Host": "www.thewhiskyexchange.com",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Safari/605.1.15",
     "Referer": "hhttps://www.thewhiskyexchange.com",
-    "Connection": "keep-alive"
+    "Connection": "keep-alive",
 }
 
 htfw_headers = {
@@ -557,8 +557,12 @@ dali_headers = {
     "Connection": "keep-alive"
 }
 
-
-
+tyndrum_headers = {
+    "Origin": "https://www.tyndrumwhisky.com",
+    "Host": "www.tyndrumwhisky.com",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+    "Referer": "https://www.tyndrumwhisky.com/blends-grains/blended-malts.html",    
+}
 
 def get_ds_header():
     import random

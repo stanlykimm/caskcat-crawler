@@ -7,7 +7,7 @@ async def fetch_post(headers, session, url, data):
 
 async def fetch_get(headers, session, url):
     async with session.get(url, headers=headers) as response:
-        return await response.text()
+        return await response.text(encoding='latin-1')
 
 async def fetch_get_proxy(headers, session, url, proxy):
     async with session.get(url, headers=headers, proxy=proxy) as response:
@@ -19,6 +19,3 @@ def get_proxy_list():
         '20.249.40.3:3128', '20.214.64.219:3128', '20.214.219.129:3128', '121.190.16.109:3128', 
         '3.34.13.110:80', '101.79.242.72:8080', '220.82.71.96:3128']
     return lists
-
-
-    
