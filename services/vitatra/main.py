@@ -12,7 +12,7 @@ from commons.backblaze import upload_image
 async def main():
     async with aiohttp.ClientSession() as session:
       url = 'https://www.vitatra.de/product/category/689-690/page/0?orderby=인기순'
-
+      
       res = await fetch_get(vitatra_headers, session, url)
       soup = BeautifulSoup(res, "lxml")
       products = []

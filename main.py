@@ -9,6 +9,7 @@ from services.whisky_exchange import main as we
 from services.htfw import main as htfw
 from services.dali import main as dali
 from services.tyndrum import main as tyndrum
+from services.twb import main as twb
 
 if __name__ == '__main__':
     start = time.time()

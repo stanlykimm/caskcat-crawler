@@ -564,6 +564,14 @@ tyndrum_headers = {
     "Referer": "https://www.tyndrumwhisky.com/blends-grains/blended-malts.html",    
 }
 
+twb_headers = {
+    "Content-Type": "application/json",
+    "Origin": "https://www.thewhiskybarrel.com",
+    "Host": "www.thewhiskybarrel.com",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+    "Referer": "https://www.thewhiskybarrel.com/new-arrivals", 
+}
+
 def get_ds_header():
     import random
     random.shuffle(user_agents)
