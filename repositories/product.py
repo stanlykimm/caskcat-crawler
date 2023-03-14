@@ -15,3 +15,12 @@ async def get_products_by_site(site: str):
         'site': site
     })
     return [dict(**doc) async for doc in cursor]
+
+
+async def get_all_products():
+    cursor: Cursor = mongodb.product.find({})
+    return [dict(**doc) async for doc in cursor]
+
+
+async def update_prouct(_id, product: dict):
+    cursor: Cursor = await mongodb.product.update_one({"_id":_id}, {"$set":product})

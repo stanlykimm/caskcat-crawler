@@ -10,13 +10,14 @@ from services.htfw import main as htfw
 from services.dali import main as dali
 from services.tyndrum import main as tyndrum
 from services.twb import main as twb
+from services.data import main as data
 
 if __name__ == '__main__':
     start = time.time()
 
     loop = asyncio.get_event_loop()
     tasks = [
-        asyncio.ensure_future(tyndrum.main())
+        asyncio.ensure_future(data.main())
         #asyncio.ensure_future(we.main())
         #asyncio.ensure_future(we.main())
         #Easyncio.ensure_future(mom.main()),
